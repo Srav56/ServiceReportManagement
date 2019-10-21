@@ -2,7 +2,7 @@
   $servername = "localhost";
   $username = "root";
   $password = "";
-
+  $error="";
   // Create connection
   $conn = mysqli_connect($servername, $username, $password);
 
@@ -17,24 +17,27 @@
   }
 
   
-
+  mysqli_select_db($conn,'servicereportmanagement');
   if (isset($_POST["submit"])) {
     # code...
     $checkbox=isset($_POST['loggedIn']);
-    $uname=$_POST["uname"];
+    $uname=$_POST['uname'];
     $pswd=$_POST['pwd'];
-    $result=mysqli_query($conn,"SELECT * FROM Engineer WHERE EmpID='$uname'");
-    if (mysqli_num_rows($result)>=1) {
+    //echo $uname;
+    $result=mysqli_query($conn,"SELECT * FROM engineer WHERE Emp_ID='$uname';");
+    //echo $result;
+    if (mysqli_num_rows($result)) {
       # code...
       $resultarr=mysqli_fetch_assoc($result);
-      if ($pswd != $resultarr["pwd"]) {  //consider encryption of password
+      if ($pswd != $resultarr['Pwd']) {  //consider encryption of password
         # code...
+        echo '<script language="javascript">Incorrect Password</script>';
         $error="Incorrect password";
       }
       else{
         $_SESSION['uname']=$uname;
         if($checkbox=="on"){
-          setcookie("uname",$uname,86400*30);
+          setcookie("uname",$uname,time()+86400*30);
         }
         header("location:homepage.php");
       }
@@ -57,7 +60,7 @@
 </head>
 <body>
   <div class="jumbotron jumbotron-fluid bg-dark text-light">
-    <div class="container">
+    <div class="container d-flex justify-content-center">
       <h1>Service Report Management System</h1>
     </div>
   </div>
@@ -70,16 +73,22 @@
   		</div>
   		<div class="form-group col-sm-12">
 		    <label for="pwd">Password:</label>
-    		<input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pswd" required>
+    		<input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pwd" required>
     		<div class="valid-feedback">Valid.</div>
     		<div class="invalid-feedback">Please fill out this field.</div>
   		</div>
 
-      <input type="checkbox" name="loggedIn">
-      <label>Keep me logged in</label>
+      <div class="form-check row col-sm-12" style="margin-left:20px">
+        <label class="form-check-label">
+          <input type="checkbox" class="form-check-input" name="loggedIn" value="">Keep me logged in
+        </label>  
+      </div>
+      <label style="margin-right: 25px"><?php echo $error; ?></label>
 
-      <input type="submit" name="submit" value="Submit">      
-	 	</div>
+      <div class="row col-sm-12" style="margin-left:5px">
+        <input type="submit" name="submit" class="btn btn-dark" value="Submit">      
+      </div>
+    </div>
   		
 </form>
 </body>
