@@ -11,27 +11,10 @@
       die("Connection failed: " . mysqli_connect_error());
   }
 
-  if (isset($_POST['submit'])) {
-  	# code...
-  	$custname=$_POST['customerName'];
-  	$custid=$_POST['customerID'];
-  	$complaintdate=$_POST['yearofComplaint']."-".$_POST['monthOfComplaint']."-".$_POST['dayOfComplaint'];
-  	$complainttime=$_POST['timeComplaint'];
-  	$respdate=$_POST['yearofResponse']."-".$_POST['monthOfResponse']."-".$_POST['dayOfResponse'];
-  	$resptime=$_POST['timeResponse'];
-  	$typecomplaint="";
-  	if (isset($_POST['radio'])) {
-  		$typecomplaint=$_POST['radio'];
-  	}
-  	$compid=rand();
-  	while(mysqli_num_rows(mysqli_query($conn,"SELECT * FROM Complaint WHERE compid='$compid';"))>=1){
-  		$compid=rand();
-  	}
-  	$sql="INSERT INTO Customer VALUES('$custid','$custname');";
-  	$sql.="INSERT INTO Complaint() VALUES('$compid','$complaintdate','$complainttime','$respdate','$resptime','$typecomplaint');";
-  	if (!mysqli_multi_query($conn,$sql)) {
-  		$error="Error carrying out query";
-  	}
+  if (isset($_POST['logout'])) {
+      //unset(uname);
+      setcookie("uname","",time()-86400*1);
+      header("location:login.php");
   }
 
 ?>
@@ -50,32 +33,34 @@
 	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 		<ul class="navbar-nav">
 			<li class="navbar-item active">
-				<a class="navlink btn text-light" href="./homepage.html">Home</a>
+				<a class="navlink btn text-light" href="./homepage.php">Home</a>
 			</li>
 			<li class="navbar-item">
-				<a class="navlink btn text-light" href="./searchpage.html">View report</a>
+				<a class="navlink btn text-light" href="./searchpage.php">View report</a>
 			</li> <!--save entries so far?-->
 			<li class="navbar-item">
-				<a class="navlink btn text-light" href="./login.html">Logout</a>
+				<!-- <button class="navlink btn text-light" method="post" action="./homepage.php" name="logout">Logout</button> -->
+        <form class ="" method = "post" action="homepage.php" enctype="multipart/form-data"> 
+        <input type="submit" class="navlink btn text-light" name="logout" value="Logout">
+      </form>
 			</li>
 		</ul>
 	</nav>
 	<div class="container-fluid " style="margin-top:50px">
 		<div class="row" style="margin-top:30px">
 				<div class="col-sm-12 d-flex justify-content-center">
-		  			<a href="./registercomplaint.html" class="btn btn-outline-dark">Register New Complaint</a>
+		  			<a href="./registercomplaint.php" class="btn btn-outline-dark">Register New Complaint</a>
 		  		</div>			
 		</div>
 		<div class="row" style="margin-top:30px">
 				<div class="col-sm-12 d-flex justify-content-center">
-		  			<a href="./EditReport.html" class="btn btn-outline-dark">Generate Report</a>
+		  			<a href="./EditReport.php" class="btn btn-outline-dark">Generate Report</a>
 		  		</div>			
 		</div>
 		<div class="row" style="margin-top:30px">
 				<div class="col-sm-12 d-flex justify-content-center">
-		  			<a href="./searchpage.html" type="registerNewComplaint" class="btn btn-outline-dark"">Search report</a>
+		  			<a href="./searchpage.php" type="registerNewComplaint" class="btn btn-outline-dark"">Search report</a>
 		  		</div>			
 		</div>		
 	</div>
 </body>
-
