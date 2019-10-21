@@ -11,19 +11,26 @@
       die("Connection failed: " . mysqli_connect_error());
   }
 
+  if (isset($_POST['logout'])) {
+      //unset(uname);
+      setcookie("uname","",time()-86400*1);
+      header("location:login.php");
+  }
+
+
   if (isset($_POST['submit'])) {
   	# code...
-  	$custname=$_POST['customerName'];
-  	$custid=$_POST['customerID'];
-  	$complaintdate=$_POST['yearofComplaint']."-".$_POST['monthOfComplaint']."-".$_POST['dayOfComplaint'];
-  	$complainttime=$_POST['timeComplaint'];
-  	$respdate=$_POST['yearofResponse']."-".$_POST['monthOfResponse']."-".$_POST['dayOfResponse'];
-  	$resptime=$_POST['timeResponse'];
-  	$typecomplaint="";
+  	$enggfname=$_POST['FirstName'];
+  	$engglname=$_POST['LastName'];
+  	$empid=$_POST['EngineerID'];
+  	$compid=$_POST['ComplaintID'];
+  	$complaintdate=$_POST['yearofCompletion']."-".$_POST['monthOfCompletion']."-".$_POST['dayOfCompletion'];
+  	$complainttime=$_POST['timeCompletion'];
+  	$completed="";
   	if (isset($_POST['radio'])) {
-  		$typecomplaint=$_POST['radio'];
+  		$completed=$_POST['radio'];
   	}
-  	$compid=rand();
+  	
   	while(mysqli_num_rows(mysqli_query($conn,"SELECT * FROM Complaint WHERE compid='$compid';"))>=1){
   		$compid=rand();
   	}
@@ -51,31 +58,38 @@
 	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 		<ul class="navbar-nav">
 			<li class="navbar-item active">
-				<a class="navlink btn text-light" href="./homepage.html">Home</a>
+				<a class="navlink btn text-light" href="./homepage.php">Home</a>
 			</li>
 			<li class="navbar-item">
-				<a class="navlink btn text-light" href="#">View report</a>
+				<a class="navlink btn text-light" href="./searchpage.php">View report</a>
 			</li> <!--save entries so far?-->
 			<li class="navbar-item">
-				<a class="navlink btn text-light" href="./login.html">Logout</a>
+				<!-- <button class="navlink btn text-light" method="post" action="./homepage.php" name="logout">Logout</button> -->
+        		<form class ="" method = "post" action=EditReport.php" enctype="multipart/form-data"> 
+        			<input type="submit" class="navlink btn text-light" name="logout" value="Logout">
+      			</form>
 			</li>
 		</ul>
 	</nav>
 	<div class="container-fluid">
 
 		<div class="row">	
-			<div class = "form-group col-sm-4 my-sm-3">
-				<label for = "EngineerFirstNameInput">Engineer First Name</label>
-				<input type="text" class = "form-control form-control-sm" id = "EngineerFirstNameInput"  placeholder = "First Name" name="FirstName" required>
+			<div class = "form-group col-sm-3 my-sm-3">
+				<label for = "FirstName">Engineer First Name</label>
+				<input type="text" class = "form-control form-control-sm" id = "FirstName"  placeholder = "First Name" name="FirstName" required>
 			</div>
-			<div class = "form-group col-sm-4 my-sm-3">
-				<label for = "EngineerLastNameInput">Engineer Last Name</label>
-				<input type="text" class = "form-control form-control-sm" id = "EngineerLastNameInput"  placeholder = "Last Name" name="FirstName" required>
+			<div class = "form-group col-sm-3 my-sm-3">
+				<label for = "LastName">Engineer Last Name</label>
+				<input type="text" class = "form-control form-control-sm" id = "LastName"  placeholder = "Last Name" name="FirstName" required>
 
 			</div>
-			<div class = "form-group col-sm-4 my-sm-3">
-				<label for = "EngineerIDInput">Engineer ID</label>
-				<input type="text" class = "form-control form-control-sm" id = "EngineerID"  placeholder = "EngineerID" name="LastName" required>
+			<div class = "form-group col-sm-3 my-sm-3">
+				<label for = "EngineerID">Engineer ID</label>
+				<input type="text" class = "form-control form-control-sm" id = "EngineerID"  placeholder = "EngineerID" name="EngineerID" required>
+			</div>
+			<div class = "form-group col-sm-3 my-sm-3">
+				<label for = "ComplaintID">Complaint ID</label>
+				<input type="text" class = "form-control form-control-sm" id = "ComplaintID"  placeholder = "Complaint ID" name="ComplaintID" required>
 			</div>
 		</div>
 					
@@ -90,11 +104,11 @@
 						</div>
 						<div class = "form-group col-sm-4 my-sm-3">
 							<label for = "makeAndModel">Make and Model</label>
-							<input type="text" class = "form-control form-control-sm" id = "makeAndModel"  placeholder = "Make or Model" name="makeAndModel" required>
+							<input type="text" class = "form-control form-control-sm" id = "makeAndModel"  placeholder = "Make and Model" name="makeAndModel" required>
 						</div>
 						<div class = "form-group col-sm-4 my-sm-3">
 							<label for = "slNo">Sl. No.</label>
-							<input type="text" class = "form-control form-control-sm" id = "slNo"  placeholder = "slNo" name="slNo" required>
+							<input type="text" class = "form-control form-control-sm" id = "slNo"  placeholder = "Serial Number" name="slNo" required>
 						</div>
 					</div>
 					<label for="CallDetails" class="bg-dark text-light col-sm-12">Provide the following details about the call</label>
@@ -103,13 +117,13 @@
 		  					<label for = "dateOfBirth">Date of Call Completion</label>
 		  				</div>
 		  				<div class="form-group col-sm-2">
-		  					<input type="number" name="DayCompletion" id = "dayOfCompletion" class="form-control form-control-sm" placeholder="dd" max = "31" min="1">
+		  					<input type="number" name="dayOfCompletion" id = "dayOfCompletion" class="form-control form-control-sm" placeholder="dd" max = "31" min="1">
 		  				</div>
 		  				<div class="form-group col-sm-2">
-		  					<input type="number" name="MonthCompletion" id = "monthOfCompletion" class="form-control form-control-sm" placeholder="mm" max="12">
+		  					<input type="number" name="monthOfCompletion" id = "monthOfCompletion" class="form-control form-control-sm" placeholder="mm" max="12">
 		  				</div>
 		  				<div class="form-group col-sm-3">
-		  					<input type="number" name="YearCompletion" id = "yearofCompletion" class="form-control form-control-sm" placeholder="yyyy">
+		  					<input type="number" name="yearofCompletion" id = "yearofCompletion" class="form-control form-control-sm" placeholder="yyyy">
 		  				</div>
 		  			</div>
 		  			<div class="row">
@@ -117,7 +131,7 @@
 		  					<label for = "timeOfCompletion">Time of Completion</label>
 		  				</div>
 		  				<div class="form-group col-sm-2 my-sm-3">
-		  					<input type="time" name="timeCompletion" id="timeOfCompletion" class="form-control form-control-sm" placeholder="hh:mm:ss (24 hour format)">
+		  					<input type="time" name="timeCompletion" id="timeCompletion" class="form-control form-control-sm" placeholder="hh:mm:ss (24 hour format)">
 		  				</div>
 		  			</div>
 
