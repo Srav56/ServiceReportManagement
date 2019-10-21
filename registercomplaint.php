@@ -3,6 +3,7 @@
   $username = "root";
   $password = "";
   $error="";
+  $compid="";
   // Create connection
   $conn = mysqli_connect($servername, $username, $password);
 
@@ -10,28 +11,43 @@
   if (!$conn) {
       die("Connection failed: " . mysqli_connect_error());
   }
+  mysqli_select_db($conn,'servicereportmanagement');
+  
+  if (isset($_POST['logout'])) {
+      //unset(uname);
+      setcookie("uname","",time()-86400*1);
+      header("location:login.php");
+  }
+
 
   if (isset($_POST['submit'])) {
   	# code...
   	$custname=$_POST['customerName'];
   	$custid=$_POST['customerID'];
   	$complaintdate=$_POST['yearofComplaint']."-".$_POST['monthOfComplaint']."-".$_POST['dayOfComplaint'];
+  	//echo $complaintdate;
   	$complainttime=$_POST['timeComplaint'];
   	$respdate=$_POST['yearofResponse']."-".$_POST['monthOfResponse']."-".$_POST['dayOfResponse'];
   	$resptime=$_POST['timeResponse'];
   	$typecomplaint="";
-  	if (isset($_POST['radio'])) {
-  		$typecomplaint=$_POST['radio'];
+  	if (isset($_POST['optradio'])) {
+  		$typecomplaint=$_POST['optradio'];
   	}
-  	$compid=rand();
-  	while(mysqli_num_rows(mysqli_query($conn,"SELECT * FROM Complaint WHERE compid='$compid';"))>=1){
-  		$compid=rand();
-  	}
+  	//echo $typecomplaint;
+  	$compid=rand(0,99999);
+  	//while(mysqli_num_rows(mysqli_query($conn,"SELECT * FROM complaint WHERE Comp_id='$compid';"))>=1){
+  	//	$compid=rand();
+  	//}
   	$sql="INSERT INTO Customer VALUES('$custid','$custname');";
-  	$sql.="INSERT INTO Complaint() VALUES('$compid','$complaintdate','$complainttime','$respdate','$resptime','$typecomplaint');";
-  	if (!mysqli_multi_query($conn,$sql)) {
+  	if (!mysqli_query($conn,$sql)) {
   		$error="Error carrying out query";
   	}
+
+  	$sql="INSERT INTO Complaint() VALUES('$compid','$resptime','$respdate','$complainttime','$complaintdate','$typecomplaint','$custid','No');";
+  	if (!mysqli_query($conn,$sql)) {
+  		$error="Error carrying out query";
+  	}
+
   }
 
 ?>
@@ -54,10 +70,13 @@
 				<a class="navlink btn text-light" href="./homepage.html">Home</a>
 			</li>
 			<li class="navbar-item">
-				<a class="navlink btn text-light" href="#">View report</a>
+				<a class="navlink btn text-light" href="./searchpage">View report</a>
 			</li> <!--save entries so far?-->
 			<li class="navbar-item">
-				<a class="navlink btn text-light" href="./login.html">Logout</a>
+				<!-- <button class="navlink btn text-light" method="post" action="./homepage.php" name="logout">Logout</button> -->
+        		<form class ="" method = "post" action="registercomplaint.php" enctype="multipart/form-data"> 
+        			<input type="submit" class="navlink btn text-light" name="logout" value="Logout">
+      			</form>
 			</li>
 		</ul>
 	</nav>
@@ -125,23 +144,29 @@
 			  				<label for = "Category">Category of Complaint</label>
 				  			<div class="form-check-inline">
 								<label class="form-check-label">
-									<input type="radio" class="form-check-input" name="optradio">AMC
+									<input type="radio" class="form-check-input" name="optradio" value="AMC">AMC
 								</label>
 							</div>
 							<div class="form-check-inline">
 								<label class="form-check-label">
-									<input type="radio" class="form-check-input" name="optradio">On Call
+									<input type="radio" class="form-check-input" name="optradio" value="On Call">On Call
 								</label>
 							</div>
 							<div class="form-check-inline">
 								<label class="form-check-label">
-									<input type="radio" class="form-check-input" name="optradio">Others
+									<input type="radio" class="form-check-input" name="optradio" value="Others">Others
 								</label>
 							</div>
 				  		</div>
 			  		<h4 class = "messageLine form-group">&nbsp;</h4>
 					<div class="col-sm-12">
 		  				<input type="submit" class="btn btn-outline-dark" name="submit" value="Submit">
+		  			</div>
+		  			<div class="col-sm-12">
+		  				<label><?php echo $error?></label>
+		  			</div>
+		  			<div class="col-sm-12">   
+		  				<label>Complaint ID (Please remember for future reference):<?php echo $compid?></label>
 		  			</div>
 				</form>
 			</div>
