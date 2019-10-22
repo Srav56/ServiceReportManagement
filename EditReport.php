@@ -18,24 +18,35 @@
   }
 
 
-  if (isset($_POST['submit'])) {
+ if (isset($_POST['submit'])) {
   	# code...
-  	$enggfname=$_POST['FirstName'];
-  	$engglname=$_POST['LastName'];
-  	$empid=$_POST['EngineerID'];
-  	$compid=$_POST['ComplaintID'];
-  	$complaintdate=$_POST['yearofCompletion']."-".$_POST['monthOfCompletion']."-".$_POST['dayOfCompletion'];
-  	$complainttime=$_POST['timeCompletion'];
-  	$completed="";
+  	$engfname=$_POST['EngineerFirstNameInput'];
+  	$englname=$_POST['EngineerLastNameInput'];
+  	$engid=$_POST['EngineerID'];
+  	$unit=$_POST['Unit'];
+  	$mandm=$_POST['makeAndModel'];
+  	$slno=$_POST['slNo'];
+  	$completedate=$_POST['yearofCompletion']."-".$_POST['monthOfCompletion']."-".$_POST['dayOfCompletion'];
+  	$completetime=$_POST['timeOfCompletion'];
+  	$probreprted=$_POST['problemReported'];
+  	$slnospares=$_POST['slNoSpares'];
+  	$workdone=$_POST['workDone'];
+  	$sparesreplaced=$_POST['sparesReplaced'];
+  	$callcomleted="";
+        $reportid="";
   	if (isset($_POST['radio'])) {
-  		$completed=$_POST['radio'];
+  		$callcomleted=$_POST['radio'];
   	}
-  	
-  	while(mysqli_num_rows(mysqli_query($conn,"SELECT * FROM Complaint WHERE compid='$compid';"))>=1){
-  		$compid=rand();
+  	$reportid=rand();
+  	while(mysqli_num_rows(mysqli_query($conn,"SELECT * FROM Report WHERE report_id='$reportid';"))>=1){
+  		$reportid=rand();
   	}
-  	$sql="INSERT INTO Customer VALUES('$custid','$custname');";
-  	$sql.="INSERT INTO Complaint() VALUES('$compid','$complaintdate','$complainttime','$respdate','$resptime','$typecomplaint');";
+  	$sql="SELECT EngineerID FROM Engineer WHERE EngineerID = '$engid'";
+  	$sql.="INSERT INTO Complaint(,,Completed) VALUES('$completedate','$completetime','$callcomleted');";
+  	$sql.="INSERT INTO Reported() VALUES('$compid','$slno','$probreprted');";
+  	$sql.="INSERT INTO Machine() VALUES('$slno','$unit','$mandm');";
+  	$sql.="INSERT INTO Report(report_id,workDone) VALUES('$reportid','$workdone');";
+  	$sql.="INSERT INTO Sparereq() VALUES('$slnospares','$sparesreplaced','$reportid');";
   	if (!mysqli_multi_query($conn,$sql)) {
   		$error="Error carrying out query";
   	}
