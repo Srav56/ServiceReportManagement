@@ -41,8 +41,8 @@
   	while(mysqli_num_rows(mysqli_query($conn,"SELECT * FROM Report WHERE report_id='$reportid';"))>=1){
   		$reportid=rand();
   	}
-  	$sql="SELECT EngineerID FROM Engineer WHERE EngineerID = '$engid'";
-  	$sql.="INSERT INTO complaint(,,Completed) VALUES('$completedate','$completetime','$callcomleted');";
+  	$sql="SELECT Emp_id FROM engineer WHERE Emp_id = '$engid'";
+  	$sql.="INSERT INTO complaint(CompletedDate,CompletedTime,Completed) VALUES('$completedate','$completetime','$callcomleted');";
   	$sql.="INSERT INTO reported(Comp_id,Problems,Sl_No) VALUES('$compid','$probreprted','$slno');";
   	$sql.="INSERT INTO machine(Sl_No,Unit,Make) VALUES('$slno','$unit','$mandm');";
   	$sql.="INSERT INTO report(Report_id,Work_Done) VALUES('$reportid','$workdone');";
