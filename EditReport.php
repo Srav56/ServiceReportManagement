@@ -42,11 +42,11 @@
   		$reportid=rand();
   	}
   	$sql="SELECT EngineerID FROM Engineer WHERE EngineerID = '$engid'";
-  	$sql.="INSERT INTO Complaint(,,Completed) VALUES('$completedate','$completetime','$callcomleted');";
-  	$sql.="INSERT INTO Reported() VALUES('$compid','$slno','$probreprted');";
-  	$sql.="INSERT INTO Machine() VALUES('$slno','$unit','$mandm');";
-  	$sql.="INSERT INTO Report(report_id,workDone) VALUES('$reportid','$workdone');";
-  	$sql.="INSERT INTO Sparereq() VALUES('$slnospares','$sparesreplaced','$reportid');";
+  	$sql.="INSERT INTO complaint(,,Completed) VALUES('$completedate','$completetime','$callcomleted');";
+  	$sql.="INSERT INTO reported(Comp_id,Problems,Sl_No) VALUES('$compid','$probreprted','$slno');";
+  	$sql.="INSERT INTO machine(Sl_No,Unit,Make) VALUES('$slno','$unit','$mandm');";
+  	$sql.="INSERT INTO report(Report_id,Work_Done) VALUES('$reportid','$workdone');";
+  	$sql.="INSERT INTO sparereq(Spare_id,Report_id,Spare) VALUES('$slnospares','$reportid','$sparesreplaced');";
   	if (!mysqli_multi_query($conn,$sql)) {
   		$error="Error carrying out query";
   	}
