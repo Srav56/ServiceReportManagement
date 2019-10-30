@@ -1,3 +1,48 @@
+<?php
+  $servername = "localhost";
+  $username = "root";
+  $password = "";
+  $error="";
+  $compid="";
+  // Create connection
+  $conn = mysqli_connect($servername, $username, $password);
+
+  // Check connection
+  if (!$conn) {
+      die("Connection failed: " . mysqli_connect_error());
+  }
+  mysqli_select_db($conn,'servicereportmanagement');
+  
+  if (isset($_POST['logout'])) {
+      //unset(uname);
+      setcookie("uname","",time()-86400*1);
+      header("location:login.php");
+  }
+
+
+  if (isset($_POST['Search'])) {
+  	# code...
+  	  $reportid=$_POST['reportid'];
+  	
+  	  $sql="SELECT Report_id, Emp_id, Work_Done from report where Report_id = '$reportid';";
+  	  if (!mysqli_query($conn,$sql)) {
+  	      $error="Invalid entry!!";
+  	  }
+  	  $result = $conn->query($sql);
+
+	  if ($result->num_rows > 0) {
+    	  while($row = $result->fetch_assoc())
+      	      echo "Report ID: " . $row["Report_id"]. " - Employee ID: " . $row["Emp_id"]. " - Work Done: " . $row["Work_Done"]. "<br>";
+      } 
+	  else {
+      echo "0 results";
+	  }
+	  $conn->close();
+
+  	
+  }
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,7 +70,7 @@
 	</nav>	
 	<div class="container-fluid d-flex justify-content-center">
 		<div class="input-group col-sm-6" style="margin-top:50px">
-    		<input type="text" class="form-control" placeholder="Search">
+    		<input type="text" id="reportid" class="form-control" placeholder="Search">
     		<div class="input-group-append">
     			<button class="btn btn-dark" onclick="" type="button">Search</button>
     		</div>
@@ -33,3 +78,4 @@
  	</div>
 
 </body>
+</html>
