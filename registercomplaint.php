@@ -27,8 +27,6 @@
   	$complaintdate=$_POST['yearofComplaint']."-".$_POST['monthOfComplaint']."-".$_POST['dayOfComplaint'];
   	//echo $complaintdate;
   	$complainttime=$_POST['timeComplaint'];
-  	$respdate=$_POST['yearofResponse']."-".$_POST['monthOfResponse']."-".$_POST['dayOfResponse'];
-  	$resptime=$_POST['timeResponse'];
   	$typecomplaint="";
   	if (isset($_POST['optradio'])) {
   		$typecomplaint=$_POST['optradio'];
@@ -43,7 +41,7 @@
   		$error="Error carrying out query";
   	}
 
-  	$sql="INSERT INTO Complaint() VALUES('$compid','$resptime','$respdate','$complainttime','$complaintdate','$typecomplaint','$custid','No');";
+  	$sql="INSERT INTO Complaint(Comp_id,ReceivedTime,ReceivedDate,Type,Customer_is,Completed) VALUES('$compid','$complainttime','$complaintdate','$typecomplaint','$custid','No');";
   	if (!mysqli_query($conn,$sql)) {
   		$error="Error carrying out query";
   	}
@@ -118,28 +116,7 @@
 		  					<input type="time" name="timeComplaint" id="timeComplaint" class="form-control form-control-sm" placeholder="hh:mm:ss (24 hour format)" required>
 		  				</div>
 		  			</div>
-		  			<div class = "row" >
-		  				<div class="form-group col-sm-2">
-		  					<label for = "dateOfBirth">Date of Response</label>
-		  				</div>
-		  				<div class="form-group col-sm-2">
-		  					<input type="number" name="dayOfResponse" id = "dayOfResponse" class="form-control form-control-sm" placeholder="dd" max = "31" min="1" required>
-		  				</div>
-		  				<div class="form-group col-sm-2">
-		  					<input type="number" name="monthOfResponse" id = "monthOfResponse" class="form-control form-control-sm" placeholder="mm" max="12" required>
-		  				</div>
-		  				<div class="form-group col-sm-3">
-		  					<input type="number" name="yearofResponse" id = "yearofResponse" class="form-control form-control-sm" placeholder="yyyy" required>
-		  				</div>
-		  			</div>
-		  			<div class="row">
-		  				<div class="form-group col-sm-2">
-		  					<label for = "timeOfResponse">Time of Response</label>
-		  				</div>
-		  				<div class="form-group my-sm-3">
-		  					<input type="time" name="timeResponse" id="timeResponse" class="form-control form-control-sm" placeholder="hh:mm:ss (24 hour format)" required>
-		  				</div>
-		  			</div>
+		  			
 				  		<div class="form-group col-md-5" style="margin-right: 0px">
 			  				<label for = "Category">Category of Complaint</label>
 				  			<div class="form-check-inline">
