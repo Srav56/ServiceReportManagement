@@ -32,6 +32,7 @@
   	$completetime=$_POST['timeOfCompletion'];
   	$probreprted=$_POST['problemReported'];
   	$slnospares=$_POST['slNoSpares'];
+  	$observations=$_POST['observations'];
   	$workdone=$_POST['workDone'];
   	$sparesreplaced=$_POST['sparesReplaced'];
   	$callcomleted="";
@@ -192,6 +193,13 @@
 				  		
 
 				  	</div>
+				  	<label for="Observations" class="bg-dark text-light col-sm-12">Provide the following details about the observations</label>
+				  	<div class="row">
+				  		<div class="form-group col-sm-12 my-sm-6">
+				  			<label for = "observations">Observations</label>
+				  			<textarea class = "form-control form-control-sm" id = "observations" rows = "2"></textarea>
+				  		</div>
+			  		</div>
 				  	<label for="WorkDetails" class="bg-dark text-light col-sm-12">Provide the following details about the work done</label>
 				  	<div class="row">
 				  		<div class="form-group col-sm-12 my-sm-6">
