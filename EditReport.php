@@ -26,6 +26,8 @@
   	$unit=$_POST['Unit'];
   	$mandm=$_POST['makeAndModel'];
   	$slno=$_POST['slNo'];
+  	$respdate=$_POST['yearofResponse']."-".$_POST['monthOfResponse']."-".$_POST['dayOfResponse'];
+  	$resptime=$_POST['timeResponse'];
   	$completedate=$_POST['yearofCompletion']."-".$_POST['monthOfCompletion']."-".$_POST['dayOfCompletion'];
   	$completetime=$_POST['timeOfCompletion'];
   	$probreprted=$_POST['problemReported'];
@@ -41,12 +43,17 @@
   	while(mysqli_num_rows(mysqli_query($conn,"SELECT * FROM Report WHERE report_id='$reportid';"))>=1){
   		$reportid=rand();
   	}
-  	$sql="SELECT Emp_id FROM engineer WHERE Emp_id = '$engid'";
-  	$sql.="INSERT INTO complaint(CompletedDate,CompletedTime,Completed) VALUES('$completedate','$completetime','$callcomleted');";
-  	$sql.="INSERT INTO reported(Comp_id,Problems,Sl_No) VALUES('$compid','$probreprted','$slno');";
+  	$sql="INSERT into assigned VALUES('$engid','$compid','$respdate','$resptime');";
+  	$sql.="UPDATE complaint set CompletedDate = '$completedate' where Comp_id = '$compid';";
+  	$sql.="UPDATE complaint set CompletedTime = '$completetime' where Comp_id = '$compid';";
+  	$sql.="UPDATE complaint set Completed ='$callcomleted' where Comp_id = '$compid';";
+  	$sql.="INSERT INTO based_on VALUES('$slno','$reportid');";
+  	$sql.="INSERT INTO diagnosis(Sl_No,Comp_id) VALUES('$slno','$compid');";
+  	$sql.="INSERT INTO reported VALUES('$compid','$probreprted','$slno');";
   	$sql.="INSERT INTO machine(Sl_No,Unit,Make) VALUES('$slno','$unit','$mandm');";
-  	$sql.="INSERT INTO report(Report_id,Work_Done) VALUES('$reportid','$workdone');";
-  	$sql.="INSERT INTO sparereq(Spare_id,Report_id,Spare) VALUES('$slnospares','$reportid','$sparesreplaced');";
+  	$sql.="INSERT INTO report(Report_id,Work_Done,Emp_id) VALUES('$reportid','$workdone','$engid');";
+  	$sql.="INSERT INTO sparerep VALUES('$slnospares','$reportid','$sparesreplaced');";
+  	$sql.="INSERT INTO sparereq VALUES('$slnospares','$slno','$sparesreplaced');";
   	if (!mysqli_multi_query($conn,$sql)) {
   		$error="Error carrying out query";
   	}
@@ -124,6 +131,28 @@
 					</div>
 					<label for="CallDetails" class="bg-dark text-light col-sm-12">Provide the following details about the call</label>
 		  			<div class = "row" >
+		  				<div class="form-group col-sm-2">
+		  					<label for = "dateOfBirth">Date of Response</label>
+		  				</div>
+		  				<div class="form-group col-sm-2">
+		  					<input type="number" name="dayOfResponse" id = "dayOfResponse" class="form-control form-control-sm" placeholder="dd" max = "31" min="1" required>
+		  				</div>
+		  				<div class="form-group col-sm-2">
+		  					<input type="number" name="monthOfResponse" id = "monthOfResponse" class="form-control form-control-sm" placeholder="mm" max="12" required>
+		  				</div>
+		  				<div class="form-group col-sm-3">
+		  					<input type="number" name="yearofResponse" id = "yearofResponse" class="form-control form-control-sm" placeholder="yyyy" required>
+		  				</div>
+		  			</div>
+		  			<div class="row">
+		  				<div class="form-group col-sm-2">
+		  					<label for = "timeOfResponse">Time of Response</label>
+		  				</div>
+		  				<div class="form-group my-sm-3">
+		  					<input type="time" name="timeResponse" id="timeResponse" class="form-control form-control-sm" placeholder="hh:mm:ss (24 hour format)" required>
+		  				</div>
+		  			    </div>
+		  			    <div class = "row" >
 		  				<div class="form-group col-sm-2">
 		  					<label for = "dateOfBirth">Date of Call Completion</label>
 		  				</div>
